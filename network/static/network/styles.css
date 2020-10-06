@@ -1,0 +1,9 @@
+.body{
+    position: fixed;
+    top: 100px;
+    bottom: 100px;
+    left: 0;
+    right: 0;
+    background-color: #F63;
+    overflow: auto;
+}
