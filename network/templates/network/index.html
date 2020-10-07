@@ -1,20 +1,27 @@
 {% extends "network/layout.html" %}
-
+{% load static %}
 {% block body %}
 <div class="container">
-    <div class="row">
-      <div class="col-sm-4">
-        <h3>Column 1</h3>
-        <p>Lorem ipsum dolor..</p>
+<h1>All Posts</h1>
+{% if user.is_authenticated %}
+  <form>
+      <div class="form-group">
+        <label for="inputlg">New Post</label>
+        <textarea class="form-control" id="inputlg" rows="6" placeholder="What do you dream about ?"></textarea>
       </div>
-      <div class="col-sm-4">
-        <h3>Column 2</h3>
-        <p>Lorem ipsum dolor..</p>
-      </div>
-      <div class="col-sm-4">
-        <h3>Column 3</h3>
-        <p>Lorem ipsum dolor..</p>
-      </div>
-    </div>
-  </div>
+    
+    <button type="submit" class="btn btn-primary">Post</button>
+  
+  </form>
+{% endif %}
+<div id="posts-view">
+  <h2>Comments</h2>
+</div>
+
+</div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/posts.js' %}"></script>
 {% endblock %}
