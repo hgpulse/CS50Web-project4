@@ -7,9 +7,11 @@ class User(AbstractUser):
     pass
 
 class Post (models.Model):
-    author = models.CharField(max_length=100, blank=True)
+    #user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="Post")
+    author = models.IntegerField(blank=False)
     content = models.CharField(max_length=100)
     date = models.DateTimeField(auto_now=True)
+    like = models.IntegerField(blank=True)
    
 
     def __str__(self):
@@ -23,7 +25,7 @@ class PostForm(ModelForm):
     class Meta:
         model = Post
         fields = ('__all__')
-        exclude =('user',)
+        exclude =('author','like')
         widgets = {
             'content': Textarea(attrs={'placeholder':'What do you dream about ?', 'class':'form-control', 'id':'inputlg', 'rows':'6'}), 
             'date': SelectDateWidget()

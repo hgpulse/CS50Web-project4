@@ -8,36 +8,35 @@ from .models import User, PostForm, Post
 
 
 def index(request):
+    allPosts = Post.objects.all()
+    # Convert dictionary in JSON object
+ 
     if request.method == 'POST':
-        print(request.user)
+        print(request.user.id)
         form = PostForm(request.POST, request.user)
      
         if form.is_valid():
             instance = form.save(commit=False)
             instance.user = request.user
-            author = request.user
+            author = request.user.id
+           
+            
             if not request.user == instance.user:
                 raise Http404
             
             content = request.POST["content"]
             
             # create the Post
-
-            p0 = Post(author=author, content=content)
+            p0 = Post(author=author, content=content, like=0)
             p0.save()
-           
-           
-            
-            print(f"Save the {Post}")
-            
-           
-            
-            return render(request, "network/index.html", {'form': form})
+
+            return HttpResponseRedirect(reverse("index"))
             
     else:
         
         form = PostForm()
-    return render(request, "network/index.html", {'form': form })
+    
+    return render(request, "network/index.html", {'form': form, 'allPosts': allPosts})
 
 
 
