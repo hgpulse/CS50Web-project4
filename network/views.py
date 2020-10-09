@@ -4,11 +4,41 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from .models import User, PostForm, Post
 
 
 def index(request):
-    return render(request, "network/index.html")
+    if request.method == 'POST':
+        print(request.user)
+        form = PostForm(request.POST, request.user)
+     
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.user = request.user
+            author = request.user
+            if not request.user == instance.user:
+                raise Http404
+            
+            content = request.POST["content"]
+            
+            # create the Post
+
+            p0 = Post(author=author, content=content)
+            p0.save()
+           
+           
+            
+            print(f"Save the {Post}")
+            
+           
+            
+            return render(request, "network/index.html", {'form': form})
+            
+    else:
+        
+        form = PostForm()
+    return render(request, "network/index.html", {'form': form })
+
 
 
 def login_view(request):

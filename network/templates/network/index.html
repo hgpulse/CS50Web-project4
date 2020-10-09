@@ -3,17 +3,20 @@
 {% block body %}
 <div class="container">
 <h1>All Posts</h1>
+
 {% if user.is_authenticated %}
-  <form>
-      <div class="form-group">
-        <label for="inputlg">New Post</label>
-        <textarea class="form-control" id="inputlg" rows="6" placeholder="What do you dream about ?"></textarea>
-      </div>
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="inputlg">New Post</label>
+      {{ form.content }}
+    </div>
     
     <button type="submit" class="btn btn-primary">Post</button>
-  
+    
   </form>
-{% endif %}
+  {% endif %}
+
 <div id="posts-view">
   <h2>Comments</h2>
 </div>
