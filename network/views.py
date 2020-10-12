@@ -6,11 +6,13 @@ from django.urls import reverse
 
 from .models import User, PostForm, Post
 
+# convert to JSON for javascript
+from django.http import JsonResponse
 
 def index(request):
     allPosts = Post.objects.all()
-    # Convert dictionary in JSON object
- 
+    # Return posts in reverse chronologial order
+    allPosts = allPosts.order_by("-date").all()
     if request.method == 'POST':
         print(request.user.id)
         form = PostForm(request.POST, request.user)
@@ -18,7 +20,8 @@ def index(request):
         if form.is_valid():
             instance = form.save(commit=False)
             instance.user = request.user
-            author = request.user.id
+            author = request.user
+            print(author)
            
             
             if not request.user == instance.user:
@@ -90,3 +93,9 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+
+
+def profile(request, username):
+    print(username)
+    return render(request, "network/profile.html")

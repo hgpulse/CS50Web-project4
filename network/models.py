@@ -7,12 +7,20 @@ class User(AbstractUser):
     pass
 
 class Post (models.Model):
-    #user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="Post")
-    author = models.IntegerField(blank=False)
+    author = models.ForeignKey("User", on_delete=models.CASCADE, related_name="author")
+    #author = models.IntegerField(blank=False)
     content = models.CharField(max_length=100)
     date = models.DateTimeField(auto_now=True)
     like = models.IntegerField(blank=True)
-   
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "author": self.author,
+            "content": self.content,
+            "date": self.date.strftime("%b %-d %Y, %-I:%M %p"),
+            "like": self.like
+        }
 
     def __str__(self):
         return f"  {self.author} wrote {self.content} on the {self.date}"

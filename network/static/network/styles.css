@@ -25,3 +25,45 @@
       margin-top: 0;
     }
 }
+
+/* profile page template*/
+body{
+    background: #edf1f5;
+    margin-top:20px;
+}
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 0 solid transparent;
+    border-radius: 0;
+}
+ul.list-style-none {
+    margin: 0;
+    padding: 0;
+}
+ul.list-style-none li {
+    list-style: none;
+}
+
+.font-light {
+    font-weight: 300;
+}
+.font-20 {
+    font-size: 25px !important;
+}
+
+
+ul.list-style-none li a {
+    color: #313131;
+    padding: 8px 0;
+    display: block;
+    text-decoration: none;
+}
+.text-muted {
+    color: #8898aa!important;
+}

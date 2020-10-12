@@ -1,9 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-
-    
+    console.log("hello")
 })
-const app = document.querySelector(`#allPosts`)
-console.log(app);
+
+
 
 
