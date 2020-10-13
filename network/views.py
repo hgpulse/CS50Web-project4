@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, PostForm, Post
+from .models import User, PostForm, Post, Profile
 
 # convert to JSON for javascript
 from django.http import JsonResponse
@@ -29,9 +29,20 @@ def index(request):
             
             content = request.POST["content"]
             
-            # create the Post
-            p0 = Post(author=author, content=content, like=0)
-            p0.save()
+           
+            # # create the Post
+            new_post = Post(author = Profile.objects.get(user = author), content = content,like = 0 )
+            new_post.save()
+         
+            
+            # p0 = Post(author=profile, content=content, like=0)
+            # # save the post
+            # p0.save()
+
+            
+            
+            
+
 
             return HttpResponseRedirect(reverse("index"))
             
@@ -90,6 +101,14 @@ def register(request):
                 "message": "Username already taken."
             })
         login(request, user)
+
+        # create profile
+        user = request.user
+        profile = Profile(user=user)
+        profile.save()
+        
+       
+
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
@@ -97,5 +116,9 @@ def register(request):
 
 
 def profile(request, username):
+    post_list = Post.objects.filter(author= Profile.objects.get(user = username))
+    # Return posts in reverse chronologial order
+    post_list = post_list.order_by("-date").all()
     print(username)
-    return render(request, "network/profile.html")
+    print(post_list)
+    return render(request, "network/profile.html", {'post_list': post_list})

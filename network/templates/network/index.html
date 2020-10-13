@@ -34,7 +34,7 @@
                
                 <div class="media-body">
                     
-                  <h4 class="media-heading user_name">by <a href="{% url 'profile' username=post.author.username%}">{{post.author.username}}</h4></a>
+                  <h4 class="media-heading user_name">by <a href="{% url 'profile' username=post.author.user.pk%}">{{post.author.user}}</h4></a>
                   <p>{{post.content}}</p>
                   <button type="submit" class="btn btn-primary">
                   <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-suit-heart-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

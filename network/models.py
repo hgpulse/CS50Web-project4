@@ -6,9 +6,18 @@ from django.forms import ModelForm, SelectDateWidget, Textarea
 class User(AbstractUser):
     pass
 
+# create This one-to-one model is often called a profile model, as it might store non-auth related information about a site user
+class Profile(models.Model):
+    user = models.OneToOneField("User", on_delete=models.CASCADE, related_name="user")
+    title = models.CharField(max_length=100, blank=True)
+    follow = models.ManyToManyField("User")
+    followed_by = models.ForeignKey("User", on_delete=models.CASCADE, related_name="followed_by", blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.user} Profile"
+
 class Post (models.Model):
-    author = models.ForeignKey("User", on_delete=models.CASCADE, related_name="author")
-    #author = models.IntegerField(blank=False)
+    author = models.ForeignKey("Profile", on_delete=models.CASCADE, related_name="author")
     content = models.CharField(max_length=100)
     date = models.DateTimeField(auto_now=True)
     like = models.IntegerField(blank=True)
@@ -27,6 +36,7 @@ class Post (models.Model):
 
     def __unicode__(self):
         return self.Post.id
+
 
 class PostForm(ModelForm):
 
