@@ -10,8 +10,16 @@ class User(AbstractUser):
 class Profile(models.Model):
     user = models.OneToOneField("User", on_delete=models.CASCADE, related_name="user")
     title = models.CharField(max_length=100, blank=True)
-    follow = models.ManyToManyField("User")
-    followed_by = models.ForeignKey("User", on_delete=models.CASCADE, related_name="followed_by", blank=True, null=True)
+    follow = models.IntegerField(blank=True, default='0')
+    followed_by = models.IntegerField(blank=True, default='0')
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user": self.user.username,
+            "follow": self.follow,
+            "followed_by": self.followed_by,   
+        }
 
     def __str__(self):
         return f"{self.user} Profile"

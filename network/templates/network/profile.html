@@ -17,32 +17,61 @@
                         <div class="d-flex flex-row">
                             <div class=""><img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="user" class="rounded-circle" width="100" /></div>
                             <div class="pl-4">
-                                <h3>Daniel Kristeen</h3>
-                                <h4>UIUX Designer</h4>
-                                <button class="btn btn-success btn-rounded text-white text-uppercase font-14"><i class="fa fa-plus mr-2"></i> Follow</button>
+                                <h3>{{name}}</h3>
+                                {% if user.is_authenticated %}
+                                    {% if currentUser != name %}
+                                    <button id='btn-follow' value="{{ name.pk }}" class="btn btn-success btn-rounded text-white text-uppercase font-14"><i class="fa fa-plus mr-2"></i> Follow</button>
+                                    <input type="hidden" id="currentUser"  value="{{ currentUser.pk }}">
+                                    {% endif %}
+                                {% endif %}
                             </div>
                         </div>
-                        <div class="row mt-5">
-                            <div class="col border-right text-center">
-                                <h2 class="font-light">14</h2>
-                                <h4 class="text-uppercase">Photos</h4>
-                            </div>
-                            <div class="col border-right text-center">
-                                <h2 class="font-light">54</h2>
-                                <h4 class="text-uppercase">Videos</h4>
-                            </div>
                             <div class="col text-center">
-                                <h2 class="font-light">145</h2>
-                                <h4 class="text-uppercase">Tasks</h4>
+                                <h2 class="font-light">{{post_list.count}}</h2>
+                                <h4 class="text-uppercase">Posts</h4>
+                                {% for post in post_list %}
+                                <p class="text-center aboutscroll">
+                                    {{post.content}} on the {{post.date}}
+                                </p>
+                                {% endfor %}
                             </div>
                         </div>
+                        
+                        
                     </div>
                     <div class="card-body border-top">
-                        {% for post in post_list %}
-                        <p class="text-center aboutscroll">
-                             Wrote {{post.content}} on the {{post.date}}
-                        </p>
-                        {% endfor %}
+                        
+                        <hr />
+                        <h4 class="font-medium text-center mt-4">Follow</h4>
+                        <ul class="list-style-none list-icons d-flex flex-item text-center pt-2">
+                            <li class="col px-2">
+                                <a href="javascript:void(0)" data-toggle="tooltip" title="" data-original-title="Shaina Chhatraliya">
+                                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="user" class="rounded-circle" width="50" />
+                                </a>
+                            </li>
+                            <li class="col px-2">
+                                <a href="javascript:void(0)" data-toggle="tooltip" title="" data-original-title="Nirav Joshi">
+                                    <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="user" class="rounded-circle" width="50" />
+                                </a>
+                            </li>
+                            <li class="col px-2">
+                                <a href="javascript:void(0)" data-toggle="tooltip" title="" data-original-title="Vishal Bhatt">
+                                    <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="user" class="rounded-circle" width="50" />
+                                </a>
+                            </li>
+                            <li class="col px-2">
+                                <a href="javascript:void(0)" data-toggle="tooltip" title="" data-original-title="More">
+                                    <button class="btn btn-circle btn-info text-white btn-lg" href="javascript:void(0)">
+                                        {% if profile.follow == 0 %}
+                                        {{profile.follow}}
+                                        {% else %}
+                                        {{profile.follow.count}}
+                                        {% endif %}
+                                    </button>
+                                </a>
+                            </li>
+                        </ul>
+
                         <hr />
                         <h4 class="font-medium text-center mt-4">Followers</h4>
                         <ul class="list-style-none list-icons d-flex flex-item text-center pt-2">
@@ -64,7 +93,7 @@
                             <li class="col px-2">
                                 <a href="javascript:void(0)" data-toggle="tooltip" title="" data-original-title="More">
                                     <button class="btn btn-circle btn-info text-white btn-lg" href="javascript:void(0)">
-                                        5+
+                                        {{profile.followed_by}}
                                     </button>
                                 </a>
                             </li>
@@ -90,15 +119,19 @@
                         </ul>
                     </div>
                 </div>
+                
             </div>
           
          
   
   
 </div>
-{% block script %}
-    <script src="{% static 'network/posts.js' %}"></script>
-{% endblock %}
-
+{% if user.is_authenticated %}
+    {% if currentUser != name %}
+        {% block script %}
+            <script src="{% static 'network/profile.js' %}"></script>
+        {% endblock %}
+    {% endif %}
+{% endif %}
 {% endblock %}
 
