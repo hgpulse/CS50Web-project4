@@ -5,11 +5,13 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
+
 from .models import User, PostForm, Post, Profile
 
 # convert to JSON for javascript
 from django.http import JsonResponse
 import json
+
 
 def index(request):
     allPosts = Post.objects.all()
@@ -142,6 +144,8 @@ def profileapi(request, user):
      # get the username from id
     
     print(f"api user: {user}")
+    # cuser = request.user
+    # print(f"current user: {cuser}")
     # Query for requested email
     try:
         profile = Profile.objects.get(user=User.objects.get(pk=user))

@@ -20,8 +20,12 @@
                                 <h3>{{name}}</h3>
                                 {% if user.is_authenticated %}
                                     {% if currentUser != name %}
-                                    <button id='btn-follow' value="{{ name.pk }}" class="btn btn-success btn-rounded text-white text-uppercase font-14"><i class="fa fa-plus mr-2"></i> Follow</button>
+                                    
+                                    <input type="hidden" id="profile"  value="{{ name.pk }}">
                                     <input type="hidden" id="currentUser"  value="{{ currentUser.pk }}">
+                                    <div id="follow-view">
+                                        
+                                    </div>
                                     {% endif %}
                                 {% endif %}
                             </div>
@@ -31,7 +35,7 @@
                                 <h4 class="text-uppercase">Posts</h4>
                                 {% for post in post_list %}
                                 <p class="text-center aboutscroll">
-                                    {{post.content}} on the {{post.date}}
+                                    {{post.content}} Wrote on the  {{post.date}}
                                 </p>
                                 {% endfor %}
                             </div>
@@ -62,8 +66,8 @@
                             <li class="col px-2">
                                 <a href="javascript:void(0)" data-toggle="tooltip" title="" data-original-title="More">
                                     <button class="btn btn-circle btn-info text-white btn-lg" href="javascript:void(0)">
-                                        {% if profile.follow == 0 %}
-                                        {{profile.follow}}
+                                        {% if profile.follow == null %}
+                                        0
                                         {% else %}
                                         {{profile.follow.count}}
                                         {% endif %}
@@ -93,7 +97,12 @@
                             <li class="col px-2">
                                 <a href="javascript:void(0)" data-toggle="tooltip" title="" data-original-title="More">
                                     <button class="btn btn-circle btn-info text-white btn-lg" href="javascript:void(0)">
-                                        {{profile.followed_by}}
+                                        {% if profile.followers == null %}
+                                        0
+                                        {% else %}
+                                        {{profile.followers.count}}
+                                        {% endif %}
+                                        
                                     </button>
                                 </a>
                             </li>
