@@ -27,9 +27,11 @@
                                     
                                     <form method="post">
                                         {% csrf_token %}
-                                        
+                                            {% if is_following  %}
+                                            <input type="submit" class="btn btn-warning btn-rounded text-white text-uppercase font-14" value="unfollow">
+                                            {% else %}
                                             <input type="submit" class="btn btn-success btn-rounded text-white text-uppercase font-14" value="follow">
-                                        
+                                            {% endif %}
                                     </form>
                                     {% endif %}
                                 {% endif %}
@@ -71,10 +73,11 @@
                             <li class="col px-2">
                                 <a href="javascript:void(0)" data-toggle="tooltip" title="" data-original-title="More">
                                     <button class="btn btn-circle btn-info text-white btn-lg" href="javascript:void(0)">
-                                        {% if profile.following == null %}
+                                        
+                                        {% if name.user.is_following.all == null %}
                                         0
                                         {% else %}
-                                        {{profile.following.count}}
+                                        {{name.user.is_following.all.count}}
                                         {% endif %}
                                     </button>
                                 </a>
@@ -102,10 +105,10 @@
                             <li class="col px-2">
                                 <a href="javascript:void(0)" data-toggle="tooltip" title="" data-original-title="More">
                                     <button class="btn btn-circle btn-info text-white btn-lg" href="javascript:void(0)">
-                                        {% if profile.follower == null %}
+                                        {% if profile.followers == null %}
                                         0
                                         {% else %}
-                                        {{profile.follower.count}}
+                                        {{profile.followers.count}}
                                         {% endif %}
                                         
                                     </button>

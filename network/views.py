@@ -110,6 +110,9 @@ def register(request):
 
 
 def profile(request, username):
+
+    
+
     # get the username from id
     name = User.objects.get(pk=username)
     # get the current user
@@ -122,27 +125,46 @@ def profile(request, username):
     
     # get profile with the specific username
     profile = Profile.objects.get(user=name)
+    # User to follow: the visited user Profile
+    user = User.objects.get(pk=username)
+    #profile to check
+    a_user = User.objects.get(pk=request.user.pk)
+    # check if the profile is followed
+    is_following = False
+    print(a_user.is_following.all())
+    print(user.user)
+    if user.user in a_user.is_following.all():
+        is_following = True
+        print(is_following)
+
+
     if request.method == 'POST':
-        print(username)
-        print(request.user.pk)
+        
         
         # User to follow: the visited user Profile
         user = User.objects.get(pk=username)
         v_profile = Profile.objects.get(user=user)
         # Create user instance: Choose the active User
         
-        a_user = User.objects.get(pk=request.user.pk)
+        
         a_Profile = Profile.objects.get(user=User.objects.get(pk=request.user.pk))
         
         #check that the user cannot follow himself
+        
         if user != a_user:
-            # add the visited profile to the active user
-            a_Profile.following.add(user)
-            #add the new follower to user
-            v_profile.follower.add(a_user)
+            if a_user in profile.followers.all():
+                v_profile.followers.remove(a_user)
+                is_following = False
+            
+            else:
+                #add the new follower to user
+                v_profile.followers.add(a_user)
+                is_following = True
+            
+
         
         
-    return render(request, "network/profile.html", {'post_list': post_list, 'name':name, 'currentUser':currentUser, 'profile':profile })
+    return render(request, "network/profile.html", {'post_list': post_list, 'name':name, 'currentUser':currentUser, 'profile':profile, 'is_following':is_following })
 
 
 
