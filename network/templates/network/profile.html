@@ -74,10 +74,11 @@
                                 <a href="javascript:void(0)" data-toggle="tooltip" title="" data-original-title="More">
                                     <button class="btn btn-circle btn-info text-white btn-lg" href="javascript:void(0)">
                                         
-                                        {% if name.user.is_following.all == null %}
+                                        
+                                        {% if name.is_following.all == null %}
                                         0
                                         {% else %}
-                                        {{name.user.is_following.all.count}}
+                                        {{name.is_following.all.count}}
                                         {% endif %}
                                     </button>
                                 </a>
