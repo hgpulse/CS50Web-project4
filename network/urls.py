@@ -10,6 +10,7 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
     path("profile/<int:username>", views.profile, name="profile"),
+    
 
 # API Routes
     path("profileapi/<int:user>", views.profileapi, name="profileapi")

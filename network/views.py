@@ -11,7 +11,7 @@ from .models import User, PostForm, Post, Profile
 # convert to JSON for javascript
 from django.http import JsonResponse
 import json
-
+from django.views.decorators.csrf import csrf_exempt
 
 def index(request):
     allPosts = Post.objects.all()
@@ -37,16 +37,6 @@ def index(request):
             # # create the Post
             new_post = Post(author = Profile.objects.get(user = author), content = content,like = 0 )
             new_post.save()
-         
-            
-            # p0 = Post(author=profile, content=content, like=0)
-            # # save the post
-            # p0.save()
-
-            
-            
-            
-
 
             return HttpResponseRedirect(reverse("index"))
             
@@ -132,18 +122,38 @@ def profile(request, username):
     
     # get profile with the specific username
     profile = Profile.objects.get(user=name)
-    
-    # create list of follower for the current user
-   
-    
-    # create list of 
+    if request.method == 'POST':
+        print(username)
+        print(request.user.pk)
+        
+        # User to follow: the visited user Profile
+        user = User.objects.get(pk=username)
+        v_profile = Profile.objects.get(user=user)
+        # Create user instance: Choose the active User
+        
+        a_user = User.objects.get(pk=request.user.pk)
+        a_Profile = Profile.objects.get(user=User.objects.get(pk=request.user.pk))
+        
+        #check that the user cannot follow himself
+        if user != a_user:
+            # add the visited profile to the active user
+            a_Profile.following.add(user)
+            #add the new follower to user
+            v_profile.follower.add(a_user)
+        
+        
     return render(request, "network/profile.html", {'post_list': post_list, 'name':name, 'currentUser':currentUser, 'profile':profile })
 
+
+
+@csrf_exempt
 @login_required
 def profileapi(request, user):
      # get the username from id
     
     print(f"api user: {user}")
+    # create user instace
+    cuser = request.user
     # cuser = request.user
     # print(f"current user: {cuser}")
     # Query for requested email
@@ -158,9 +168,10 @@ def profileapi(request, user):
 
     # Update whether profile is read or should be archived
     elif request.method == "PUT":
+        # profile.follow = cuser
         data = json.loads(request.body)
-        # if data.get("archived") is not None:
-        #     email.archived = data["archived"]
+        if data.get("follow") is not None:
+            profile.follow = cuser
         profile.save()
         return HttpResponse(status=204)
 

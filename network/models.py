@@ -8,16 +8,18 @@ class User(AbstractUser):
 
 # create This one-to-one model is often called a profile model, as it might store non-auth related information about a site user
 class Profile(models.Model):
-    user = models.OneToOneField("User", on_delete=models.CASCADE, related_name="user")
-    title = models.CharField(max_length=100, blank=True)
-    follow = models.ForeignKey("User", on_delete=models.CASCADE,related_name="following", blank=True, null=True)
-    followers = models.ForeignKey("User", on_delete=models.CASCADE,related_name="followers", blank=True, null=True)
+    user = models.OneToOneField("User", on_delete=models.CASCADE, related_name="user") # user.profile
+    title = models.CharField(max_length=100, blank=True)                               
+    follower = models.ManyToManyField("User",related_name="followers", blank=True)     # user.followers.all()
+    following = models.ManyToManyField("User",related_name="following", blank=True)    # user.following.all()
+
+    
 
     def serialize(self):
         return {
             "user": self.user.username,
-            "follow": self.follow,
-            "followers": self.followers,   
+            "follower": self.follower,
+            "following": self.following,   
         }
 
     def __str__(self):
@@ -55,3 +57,4 @@ class PostForm(ModelForm):
             'content': Textarea(attrs={'placeholder':'What do you dream about ?', 'class':'form-control', 'id':'inputlg', 'rows':'6'}), 
             'date': SelectDateWidget()
         }
+

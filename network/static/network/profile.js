@@ -41,13 +41,13 @@ function profile(name, cuser) {
         // ... do something else with profile ...
     });
 
-    fetch(`/profileapi/${name}`, {
-        method: 'PUT',
-        body: JSON.stringify({
-            follow: cuser
-        })
-      })
-      return true;
+    // fetch(`/profileapi/${name}`, {
+    //     method: 'PUT',
+    //     body: JSON.stringify({
+    //         follow: cuser
+    //     })
+    //   })
+    //   return true;
     
     
 
