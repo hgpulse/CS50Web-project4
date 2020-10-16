@@ -168,8 +168,10 @@ def profile(request, username):
 
 
 
+
 @csrf_exempt
 @login_required
+
 def profileapi(request, user):
      # get the username from id
     
@@ -202,3 +204,52 @@ def profileapi(request, user):
         return JsonResponse({
             "error": "GET or PUT request required."
         }, status=400)
+
+@login_required
+def following(request):
+    # request.user
+    # 1 user = User.objects.get(pk=1)
+    user = User.objects.get(pk=request.user.pk)
+    print(user.pk)
+    # get a list of profiles
+    # 2 list of profile : Profile.objects.filter(followers__in=[user])
+    profiles = Profile.objects.filter(followers__in=[user.pk])
+    print(profiles)
+    # 3 for profile in profiles
+    # Post.objects.filter(author__in=[profile])
+    if not profiles:
+        posts=[]
+        for profile in profiles:
+            posts = Post.objects.filter(author__in=[profile])
+        print(posts)
+
+    # Return posts in reverse chronologial order
+    # allPosts = allPosts.order_by("-date").all()
+    if request.method == 'POST':
+        # print(request.user.id)
+        form = PostForm(request.POST, request.user)
+     
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.user = request.user
+            author = request.user
+            print(author)
+           
+            
+            if not request.user == instance.user:
+                raise Http404
+            
+            content = request.POST["content"]
+            
+           
+            # # create the Post
+            new_post = Post(author = Profile.objects.get(user = author), content = content,like = 0 )
+            new_post.save()
+
+            return HttpResponseRedirect(reverse("index"))
+            
+    else:
+        
+        form = PostForm()
+    
+    return render(request, "network/following.html", {'form': form, 'allPosts': posts})

@@ -8,7 +8,7 @@ class User(AbstractUser):
 
 # create This one-to-one model is often called a profile model, as it might store non-auth related information about a site user
 class Profile(models.Model):
-    user = models.OneToOneField("User", on_delete=models.CASCADE, related_name="user") # user.profile
+    user = models.OneToOneField("User", on_delete=models.CASCADE, related_name="user") # user.user
     title = models.CharField(max_length=100, blank=True)                               
     followers = models.ManyToManyField("User",related_name="is_following", blank=True)     # user.is_following.all()
    # following = models.ManyToManyField("User",related_name="following", blank=True)    # user.following.all()
@@ -25,7 +25,7 @@ class Profile(models.Model):
         return f"{self.user} Profile"
 
 class Post (models.Model):
-    author = models.ForeignKey("Profile", on_delete=models.CASCADE, related_name="author")
+    author = models.ForeignKey("Profile", on_delete=models.CASCADE, related_name="author") #profile.author
     content = models.CharField(max_length=100)
     date = models.DateTimeField(auto_now=True)
     like = models.IntegerField(blank=True)
