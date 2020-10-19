@@ -45,7 +45,7 @@
                         
                         {% if user.is_authenticated %}
                             <li class="nav-item">
-                                <a class="nav-link" href="#"><strong>{{ user.username }}</strong></a>
+                                <a class="nav-link" href="{% url 'profile' username=user.pk%}"><strong>{{ user.username }}</strong></a>
                             </li>
                         {% endif %}
                         <li class="nav-item">
@@ -76,6 +76,8 @@
             {% block body %}
             {% endblock %}
         </div>
+       
+
         <div class="footer">
             <p> <sub>Powered by Hugo Galuppo</sub></p>
         </div>

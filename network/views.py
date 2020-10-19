@@ -13,8 +13,17 @@ from django.http import JsonResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
 
+from django.core.paginator import Paginator
+
 def index(request):
     allPosts = Post.objects.all()
+
+    # add pagination 
+    paginator = Paginator(allPosts, 10) # Show 10 posts per page.
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     # Return posts in reverse chronologial order
     allPosts = allPosts.order_by("-date").all()
     if request.method == 'POST':
@@ -111,31 +120,35 @@ def register(request):
 
 def profile(request, username):
 
-    
+    post_list = None
 
     # get the username from id
     name = User.objects.get(pk=username)
     # get the current user
     currentUser = request.user
     # print(currentUser)
-    # create list of post for the current user
-    post_list = Post.objects.filter(author= Profile.objects.get(user = username))
-    # Return posts in reverse chronologial order
-    post_list = post_list.order_by("-date").all()
     
     # get profile with the specific username
     profile = Profile.objects.get(user=name)
-    # User to follow: the visited user Profile
-    user = User.objects.get(pk=username)
-    #profile to check
-    a_user = User.objects.get(pk=request.user.pk)
-    # check if the profile is followed
-    is_following = False
-    print(a_user.is_following.all())
-    print(user.user)
-    if user.user in a_user.is_following.all():
-        is_following = True
-        print(is_following)
+
+    is_following = None
+    if currentUser in User.objects.all():
+        # create list of post for the current user
+        post_list = Post.objects.filter(author= Profile.objects.get(user = username))
+        # Return posts in reverse chronologial order
+        post_list = post_list.order_by("-date").all()
+        
+        
+        # User to follow: the visited user Profile
+        user = User.objects.get(pk=username)
+        #profile to check
+        a_user = User.objects.get(pk=request.user.pk)
+        # check if the profile is followed
+        is_following = False
+        
+        if user.user in a_user.is_following.all():
+            is_following = True
+            print(is_following)
 
 
     if request.method == 'POST':
@@ -217,7 +230,8 @@ def following(request):
     print(profiles)
     # 3 for profile in profiles
     # Post.objects.filter(author__in=[profile])
-    if not profiles:
+    
+    if profiles:
         posts=[]
         for profile in profiles:
             posts = Post.objects.filter(author__in=[profile])
