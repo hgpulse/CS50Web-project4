@@ -18,14 +18,12 @@ from django.core.paginator import Paginator
 def index(request):
     allPosts = Post.objects.all()
 
-    # add pagination 
+    # add pagination page_obj
     paginator = Paginator(allPosts, 10) # Show 10 posts per page.
-
-    page_number = request.GET.get('page')
+    page_number = request.GET.get('page') # 10 
     page_obj = paginator.get_page(page_number)
 
-    # Return posts in reverse chronologial order
-    allPosts = allPosts.order_by("-date").all()
+    
     if request.method == 'POST':
         print(request.user.id)
         form = PostForm(request.POST, request.user)
@@ -53,7 +51,7 @@ def index(request):
         
         form = PostForm()
     
-    return render(request, "network/index.html", {'form': form, 'allPosts': allPosts})
+    return render(request, "network/index.html", {'form': form, 'allPosts': allPosts, 'page_obj': page_obj})
 
 
 
@@ -122,6 +120,8 @@ def profile(request, username):
 
     post_list = None
 
+   
+
     # get the username from id
     name = User.objects.get(pk=username)
     # get the current user
@@ -135,8 +135,14 @@ def profile(request, username):
     if currentUser in User.objects.all():
         # create list of post for the current user
         post_list = Post.objects.filter(author= Profile.objects.get(user = username))
-        # Return posts in reverse chronologial order
-        post_list = post_list.order_by("-date").all()
+
+        # add pagination page_obj 
+        paginator = Paginator(post_list, 10) # Show 10 posts per page.
+        page_number = request.GET.get('page') # 10 
+        page_obj = paginator.get_page(page_number)
+
+       
+       
         
         
         # User to follow: the visited user Profile
@@ -177,7 +183,7 @@ def profile(request, username):
 
         
         
-    return render(request, "network/profile.html", {'post_list': post_list, 'name':name, 'currentUser':currentUser, 'profile':profile, 'is_following':is_following })
+    return render(request, "network/profile.html", {'post_list': post_list, 'page_obj': page_obj, 'name':name, 'currentUser':currentUser, 'profile':profile, 'is_following':is_following })
 
 
 
@@ -223,47 +229,30 @@ def following(request):
     # request.user
     # 1 user = User.objects.get(pk=1)
     user = User.objects.get(pk=request.user.pk)
-    print(user.pk)
+
     # get a list of profiles
     # 2 list of profile : Profile.objects.filter(followers__in=[user])
     profiles = Profile.objects.filter(followers__in=[user.pk])
-    print(profiles)
+   
     # 3 for profile in profiles
     # Post.objects.filter(author__in=[profile])
     
     if profiles:
+        # store result in dictionnary
         posts=[]
+       
         for profile in profiles:
+            
             posts = Post.objects.filter(author__in=[profile])
-        print(posts)
+            
+            
+        # add pagination page_obj
+        # paginator = Paginator(posts, 10) # Show 10 posts per page.
+        # page_number = request.GET.get('page') # 10 
+        # page_obj = paginator.get_page(page_number)
+   
+        print(f'all posts {posts}')
 
-    # Return posts in reverse chronologial order
-    # allPosts = allPosts.order_by("-date").all()
-    if request.method == 'POST':
-        # print(request.user.id)
-        form = PostForm(request.POST, request.user)
-     
-        if form.is_valid():
-            instance = form.save(commit=False)
-            instance.user = request.user
-            author = request.user
-            print(author)
-           
-            
-            if not request.user == instance.user:
-                raise Http404
-            
-            content = request.POST["content"]
-            
-           
-            # # create the Post
-            new_post = Post(author = Profile.objects.get(user = author), content = content,like = 0 )
-            new_post.save()
-
-            return HttpResponseRedirect(reverse("index"))
-            
-    else:
-        
-        form = PostForm()
     
-    return render(request, "network/following.html", {'form': form, 'allPosts': posts})
+    
+    return render(request, "network/following.html", {'allPosts': posts, })

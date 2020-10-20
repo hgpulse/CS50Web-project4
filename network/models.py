@@ -44,7 +44,10 @@ class Post (models.Model):
 
     def __unicode__(self):
         return self.Post.id
-
+    
+    # order in descending order for the all Post in the app
+    class Meta:
+        ordering = ('-date', )
 
 class PostForm(ModelForm):
 
