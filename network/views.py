@@ -228,31 +228,40 @@ def profileapi(request, user):
 def following(request):
     # request.user
     # 1 user = User.objects.get(pk=1)
+    
     user = User.objects.get(pk=request.user.pk)
 
     # get a list of profiles
     # 2 list of profile : Profile.objects.filter(followers__in=[user])
     profiles = Profile.objects.filter(followers__in=[user.pk])
-   
+    print(profiles)
     # 3 for profile in profiles
     # Post.objects.filter(author__in=[profile])
+    posts_dict = {}
+    # if profiles contain data = True
     
     if profiles:
-        # store result in dictionnary
-        posts=[]
-       
+        # store result
+        
+        
+            
+        # create a dict to store all the result
+        
         for profile in profiles:
             
-            posts = Post.objects.filter(author__in=[profile])
-            
-            
+            posts_dict[profile] = Post.objects.filter(author__in=[profile])
+
         # add pagination page_obj
         # paginator = Paginator(posts, 10) # Show 10 posts per page.
         # page_number = request.GET.get('page') # 10 
         # page_obj = paginator.get_page(page_number)
+
+        print(len(posts_dict))
+        
    
-        print(f'all posts {posts}')
+        
+
 
     
     
-    return render(request, "network/following.html", {'allPosts': posts, })
+    return render(request, "network/following.html", {'dict': posts_dict})
