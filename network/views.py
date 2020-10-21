@@ -271,7 +271,8 @@ def following(request):
         page_number = request.GET.get('page') # 10 
         page_obj = paginator.get_page(page_number)
 
-      
+        # total of posts
+        postNbr = len(post_list)
 
        
        
@@ -282,4 +283,4 @@ def following(request):
 
     
     
-    return render(request, "network/following.html", {'post_list': post_list, 'page_obj': page_obj })
+    return render(request, "network/following.html", {'postNbr': postNbr, 'page_obj': page_obj })
