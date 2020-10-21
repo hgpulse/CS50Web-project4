@@ -253,20 +253,26 @@ def following(request):
         
         for profile in profiles:
             
+            # result = Post.objects.filter(author__in=[profile])
+            
+            # print(result)
+            
+            # post_list.append(result)
             posts_dict[profile] = Post.objects.filter(author__in=[profile])
 
             for item in posts_dict[profile]:
-                print(item)
-                post_list.append(item)
+                 
+                 post_list.append(item)
         
         
+       
 
-        # add pagination page_obj
         paginator = Paginator(post_list, 10) # Show 10 posts per page.
         page_number = request.GET.get('page') # 10 
         page_obj = paginator.get_page(page_number)
 
-        print(len(post_list))
+      
+
        
        
         
