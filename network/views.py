@@ -141,6 +141,8 @@ def profile(request, username):
         page_number = request.GET.get('page') # 10 
         page_obj = paginator.get_page(page_number)
 
+        print(post_list)
+
        
        
         
@@ -234,12 +236,14 @@ def following(request):
     # get a list of profiles
     # 2 list of profile : Profile.objects.filter(followers__in=[user])
     profiles = Profile.objects.filter(followers__in=[user.pk])
-    print(profiles)
+  
     # 3 for profile in profiles
     # Post.objects.filter(author__in=[profile])
     posts_dict = {}
-    # if profiles contain data = True
     
+    post_list = []
+    
+      # if profiles contain data = True
     if profiles:
         # store result
         
@@ -251,12 +255,20 @@ def following(request):
             
             posts_dict[profile] = Post.objects.filter(author__in=[profile])
 
-        # add pagination page_obj
-        # paginator = Paginator(posts, 10) # Show 10 posts per page.
-        # page_number = request.GET.get('page') # 10 
-        # page_obj = paginator.get_page(page_number)
+            for item in posts_dict[profile]:
+                print(item)
+                post_list.append(item)
+        
+        
 
-        print(len(posts_dict))
+        # add pagination page_obj
+        paginator = Paginator(post_list, 10) # Show 10 posts per page.
+        page_number = request.GET.get('page') # 10 
+        page_obj = paginator.get_page(page_number)
+
+        print(len(post_list))
+       
+       
         
    
         
@@ -264,4 +276,4 @@ def following(request):
 
     
     
-    return render(request, "network/following.html", {'dict': posts_dict})
+    return render(request, "network/following.html", {'post_list': post_list, 'page_obj': page_obj })
