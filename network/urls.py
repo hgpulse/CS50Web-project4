@@ -14,7 +14,7 @@ urlpatterns = [
     
 
 # API Routes
-    path("profileapi/<int:user>", views.profileapi, name="profileapi")
+    path("postapi/<int:postid>", views.postapi, name="postapi")
 
 ]
 

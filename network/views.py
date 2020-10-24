@@ -193,31 +193,33 @@ def profile(request, username):
 @csrf_exempt
 @login_required
 
-def profileapi(request, user):
+def postapi(request, postid):
      # get the username from id
     
-    print(f"api user: {user}")
+    print(f"api post ID : {postid}")
     # create user instace
     cuser = request.user
     # cuser = request.user
     # print(f"current user: {cuser}")
     # Query for requested email
     try:
-        profile = Profile.objects.get(user=User.objects.get(pk=user))
+        post = Post.objects.get(pk=postid)
+        
     except Profile.DoesNotExist:
-        return JsonResponse({"error": "Profile not found."}, status=404)
+        return JsonResponse({"error": "Post not found."}, status=404)
 
-    # Return email contents
+    # Return post contents
     if request.method == "GET":
-        return JsonResponse(profile.serialize())
+        return JsonResponse(post.serialize())
 
-    # Update whether profile is read or should be archived
+    # Update whether email is read or should be archived
     elif request.method == "PUT":
-        # profile.follow = cuser
         data = json.loads(request.body)
-        if data.get("follow") is not None:
-            profile.follow = cuser
-        profile.save()
+        print(data)
+        if data.get("content") is not None:
+            post.content = data["content"]
+        
+        post.save()
         return HttpResponse(status=204)
 
     # Email must be via GET or PUT
@@ -225,7 +227,6 @@ def profileapi(request, user):
         return JsonResponse({
             "error": "GET or PUT request required."
         }, status=400)
-
 @login_required
 def following(request):
     # request.user
