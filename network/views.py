@@ -274,13 +274,5 @@ def following(request):
         # total of posts
         postNbr = len(post_list)
 
-       
-       
-        
-   
-        
-
-
-    
     
     return render(request, "network/following.html", {'postNbr': postNbr, 'page_obj': page_obj })
