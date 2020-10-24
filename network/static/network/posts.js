@@ -10,10 +10,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
 })
 
-function edit(user, postId) {
+function edit(postId) {
    
  
-    console.log(user)
+    
     console.log(postId)
    
 //select the post
@@ -44,6 +44,12 @@ btn.type="submit"
 btn.innerHTML="save";
 btn.className='btn btn-success btn-rounded text-white text-uppercase font-14';
 
+btn.addEventListener('click', function() {
+    console.log(`post to save:${postId}`)
+    console.log(`content:${postId}`)
+    save(postId)
+  });
+
 post.appendChild(input); //appendChild
 post.appendChild(btn); //appendChild
 content.remove();
@@ -52,19 +58,9 @@ editBtn.remove();
 
 
 console.log(postValue)
-// in post change p element to textarea
-// add save btn
-// add onclick action with fetch -->PUT
-
-
-//    let content = app.document.getElementById("content").value;
-
-//    console.log(content)
-  
-
-
-
-
 }
 
 
+function save(postId) {
+    console.log(`post to save${postId}`)
+}

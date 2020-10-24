@@ -77,7 +77,7 @@
                                 {{post.like}}
                                 </button>
                                 {% if user.is_authenticated and post.author.user == request.user%}
-                                <input id="edit" type="submit" class="btn btn-success btn-rounded text-white text-uppercase font-14" value="edit" onclick="edit( '{{ post.author.user }}', '{{ post.id }}' )">
+                                <input id="edit" type="submit" class="btn btn-success btn-rounded text-white text-uppercase font-14" value="edit" onclick="edit( '{{ post.id }}' )">
                                 {% endif %}
                               </div>
           
