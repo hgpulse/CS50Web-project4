@@ -199,8 +199,7 @@ def postapi(request, postid):
     print(f"api post ID : {postid}")
     # create user instace
     cuser = request.user
-    # cuser = request.user
-    # print(f"current user: {cuser}")
+    print(f'live user: {cuser.pk}')
     # Query for requested email
     try:
         post = Post.objects.get(pk=postid)
@@ -215,10 +214,21 @@ def postapi(request, postid):
     # Update whether email is read or should be archived
     elif request.method == "PUT":
         data = json.loads(request.body)
-        print(data)
+        
+        
         if data.get("content") is not None:
             post.content = data["content"]
         
+        if data.get("user") is not None:
+            print(post.likes.all())
+            if cuser in post.likes.all():
+                # remove user ID
+                # print(f'remove action: {cuser} id {cuser.pk}')
+                post.likes.remove(cuser.pk)
+            
+            else:
+                #print(f'Add action: {cuser} id {cuser.pk}')
+                post.likes.add(cuser.pk)
         post.save()
         return HttpResponse(status=204)
 

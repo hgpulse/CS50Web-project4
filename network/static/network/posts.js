@@ -12,13 +12,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function edit(postId) {
    
- 
+
     
     console.log(postId)
    
 //select the post
 //get input
-const post = document.getElementById(`${postId}`);
+post = document.getElementById(`${postId}`);
 console.log(post)
 //get edit btn
 const editBtn = document.querySelector('#edit');
@@ -71,8 +71,11 @@ console.log(postValue)
 
 function save(postId) {
     //let content = document.getElementById(`write-content`).value;
+     //clean post dom 
     const post = document.getElementById(`${postId}`);
-    let content = post.querySelector(`#write-content`).value;
+    
+    content.innerHTML = '';
+    content = post.querySelector(`#write-content`).value;
     console.log(`post to save${postId}`)
     console.log(`content to save : ${content}`)
 
@@ -88,6 +91,7 @@ function save(postId) {
         post.querySelector("#content").textContent = content;
         
         
+        
         //hide edit
         
         post.querySelector(`#write-content`).style.display = 'none';
@@ -97,9 +101,59 @@ function save(postId) {
         post.querySelector("#content").style.display = 'block';
         post.querySelector('#edit').style.display = 'block';
         
+       
         
 
      return true;
 
 }
 
+function like(postId, user) {
+   
+    const post = document.getElementById(`${postId}`);
+    let likeCount = post.querySelector(`#like`);
+    
+    //GET THE ACTUAL USER
+    console.log(`post to like : ${postId}`)
+    console.log(`user to add or remove : ${user}`)
+    console.log(`Like count : ${likeCount}`)
+
+    // get likes number 
+    fetch(`/postapi/${postId}`)
+        .then(response => response.json())
+        .then(post => {
+            // Print emails
+            console.log(post.likes);
+            //likeCount = post.likes;
+            
+            // ... do something else with emails ...
+        });
+    
+
+    fetch(`/postapi/${postId}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+            user: user
+            })
+        })
+
+    
+        
+        
+    
+        //update DOM
+        //post.querySelector("#content").textContent = content;
+        
+        //show p content and btn view
+        // post.querySelector("#content").style.display = 'block';
+        // post.querySelector('#edit').style.display = 'block';
+        
+       
+        
+
+     return true;
+
+}
+function thumb(x) {
+    x.classList.toggle("fa-thumbs-down");
+  } 

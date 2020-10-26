@@ -28,15 +28,18 @@ class Post (models.Model):
     author = models.ForeignKey("Profile", on_delete=models.CASCADE, related_name="author") #profile.author
     content = models.CharField(max_length=100)
     date = models.DateTimeField(auto_now=True)
-    like = models.IntegerField(blank=True)
+    likes = models.ManyToManyField("User",related_name="likes")
+
+    def totallikes(self):
+        return self.likes.count()
     
     def serialize(self):
         return {
-            "id": self.id,
-            "author": self.author,
+            "id": self.pk,
+            "author": self.author.user.username,
             "content": self.content,
             "date": self.date.strftime("%b %-d %Y, %-I:%M %p"),
-            "like": self.like
+            "likes": self.likes.count()
         }
 
     def __str__(self):
