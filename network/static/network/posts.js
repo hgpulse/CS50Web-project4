@@ -118,54 +118,45 @@ function like(postId, user) {
     console.log(`user to add or remove : ${user}`)
     
     // first update list
-    fetch(`/postapi/${postId}`, {
+    // fetch(`/postapi/${postId}`, {
+    //     method: 'PUT',
+    //     body: JSON.stringify({
+    //     user: user
+    //     })
+    // })
+    
+    async function postlike() {
+        const response = await fetch(`/postapi/${postId}`, {
         method: 'PUT',
         body: JSON.stringify({
         user: user
         })
-    })
-    
-    
-    // fetch Async to wait for the updated response
-    
-    async function fetchlikesJSON() {
-        const response = await fetch(`/postapi/${postId}`);
-        const post = await response.json();  return post;
-      }
-      
-      fetchlikesJSON().then( post => {
-        likeCount = likeBtn.querySelector('#likecount');
-
-       likeCount.innerHTML = post.likes;
-        // Print emails
-        console.log(post.likes);
-        // ... do something else with emails ...
         
       });
+    }
+    // fetch Async to wait for the updated response
+    
+    async function getlikes() {
+        const response = await fetch(`/postapi/${postId}`);
+        const post = await response.json();  return await post;
+      }
+      
+    
+      //chain promising for top level chaining
+      //always use 
+      
+      postlike()
+      .then(result => getlikes(result) //always use result to wait the promise!
+      .then( post => {
+        likeCount = likeBtn.querySelector('#likecount');
+           likeCount.innerHTML = post.likes;
+            // Print emails
+            console.log(post.likes);
+            // ... do something else with emails ...
+            
+          })
+      )
 
-  
-    
-    
-    
-
-
-       
-    
-        
-    
-        //update DOM
-        //post.querySelector("#content").textContent = content;
-        
-        //show p content and btn view
-        // post.querySelector("#content").style.display = 'block';
-        // post.querySelector('#edit').style.display = 'block';
-        
-       
-        
-
-     return true;
+     
 
 }
-function thumb(x) {
-    x.classList.toggle("fa-thumbs-down");
-  } 
