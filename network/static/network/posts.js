@@ -81,27 +81,57 @@ function save(postId) {
 
     
 
-    fetch(`/postapi/${postId}`, {
+    // fetch(`/postapi/${postId}`, {
+    //         method: 'PUT',
+    //         body: JSON.stringify({
+    //         content: content
+    //         })
+    //     })
+        
+        async function savePost() {
+            const response = await fetch(`/postapi/${postId}`, {
             method: 'PUT',
             body: JSON.stringify({
             content: content
             })
-        })
-        //update DOM
-        post.querySelector("#content").textContent = content;
         
+            });
+        }
+
+
+        // fetch Async to wait for the updated response
+    
+        async function getPost() {
+        const response = await fetch(`/postapi/${postId}`);
+        const postc = await response.json();  return await postc;
+      }
+
+
+
+        savePost()
+        .then(result => getPost(result) //always use result to wait the promise!
+        .then( postc => {
         
-        
-        //hide edit
-        
-        post.querySelector(`#write-content`).style.display = 'none';
-        post.querySelector("#save").style.display = 'none';
-        
-        //show p content and btn view
-        post.querySelector("#content").style.display = 'block';
-        post.querySelector('#edit').style.display = 'block';
-        
+            console.log(postc.content)
+            //update DOM
+            post.querySelector("#content").innerHTML = postc.content;
+            
+            
+            
+            //hide edit
+            
+            post.querySelector(`#write-content`).style.display = 'none';
+            post.querySelector("#save").style.display = 'none';
+            
+            //show p content and btn view
+            post.querySelector("#content").style.display = 'block';
+            post.querySelector('#edit').style.display = 'block';
+            
+            
+          })
+      )
        
+
         
 
      return true;

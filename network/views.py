@@ -42,7 +42,7 @@ def index(request):
             
            
             # # create the Post
-            new_post = Post(author = Profile.objects.get(user = author), content = content,like = 0 )
+            new_post = Post(author = Profile.objects.get(user = author), content = content )
             new_post.save()
 
             return HttpResponseRedirect(reverse("index"))
