@@ -111,34 +111,46 @@ function save(postId) {
 function like(postId, user) {
    
     const post = document.getElementById(`${postId}`);
-    let likeCount = post.querySelector(`#like`);
+    let likeBtn = post.querySelector(`#like`);
     
     //GET THE ACTUAL USER
     console.log(`post to like : ${postId}`)
     console.log(`user to add or remove : ${user}`)
-    console.log(`Like count : ${likeCount}`)
-
-    // get likes number 
-    fetch(`/postapi/${postId}`)
-        .then(response => response.json())
-        .then(post => {
-            // Print emails
-            console.log(post.likes);
-            //likeCount = post.likes;
-            
-            // ... do something else with emails ...
-        });
     
-
+    // first update list
     fetch(`/postapi/${postId}`, {
-            method: 'PUT',
-            body: JSON.stringify({
-            user: user
-            })
+        method: 'PUT',
+        body: JSON.stringify({
+        user: user
         })
-
+    })
     
+    
+    // fetch Async to wait for the updated response
+    
+    async function fetchlikesJSON() {
+        const response = await fetch(`/postapi/${postId}`);
+        const post = await response.json();  return post;
+      }
+      
+      fetchlikesJSON().then( post => {
+        likeCount = likeBtn.querySelector('#likecount');
+
+       likeCount.innerHTML = post.likes;
+        // Print emails
+        console.log(post.likes);
+        // ... do something else with emails ...
         
+      });
+
+  
+    
+    
+    
+
+
+       
+    
         
     
         //update DOM
