@@ -74,7 +74,7 @@
                                       <a href="{% url 'profile' username=post.author.user.pk%}">
                                     {% endif %}
                                         {{post.author.user}}</h4></a>
-                                   
+                                        <small> {{post.date}} </small>
                                     <p id='content'>{{post.content}}</p>
                                     {% if user.is_authenticated %}
                                     <button value="{{ post.likes.count }}" id='like' type="submit" class="btn btn-primary" onclick="like( '{{ post.id }}', '{{ request.user }}' )">
