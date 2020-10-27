@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // document.querySelector('#edit').addEventListener('click', () => load_mailbox('inbox'));
     
-    console.log("hello")
+    
     // By default, follow btn
     
 })
@@ -19,7 +19,7 @@ function edit(postId) {
 //select the post
 //get input
 post = document.getElementById(`${postId}`);
-console.log(post)
+// console.log(post)
 //get edit btn
 const editBtn = document.querySelector('#edit');
 
@@ -50,8 +50,8 @@ btn.addEventListener('click', function() {
 
 
 
-    console.log(`post to save:${postId}`)
-    console.log(`content:${postId}`)
+    // console.log(`post to save:${postId}`)
+    // console.log(`content:${postId}`)
     save(postId)
   });
 
@@ -65,7 +65,7 @@ editBtn.style.display = 'none';
 
 
 
-console.log(postValue)
+// console.log(postValue)
 }
 
 
@@ -76,8 +76,8 @@ function save(postId) {
     
     content.innerHTML = '';
     content = post.querySelector(`#write-content`).value;
-    console.log(`post to save${postId}`)
-    console.log(`content to save : ${content}`)
+    // console.log(`post to save${postId}`)
+    // console.log(`content to save : ${content}`)
 
     
 
@@ -112,7 +112,7 @@ function save(postId) {
         .then(result => getPost(result) //always use result to wait the promise!
         .then( postc => {
         
-            console.log(postc.content)
+            // console.log(postc.content)
             //update DOM
             post.querySelector("#content").innerHTML = postc.content;
             
@@ -144,8 +144,8 @@ function like(postId, user) {
     let likeBtn = post.querySelector(`#like`);
     
     //GET THE ACTUAL USER
-    console.log(`post to like : ${postId}`)
-    console.log(`user to add or remove : ${user}`)
+    // console.log(`post to like : ${postId}`)
+    // console.log(`user to add or remove : ${user}`)
     
     // first update list
     // fetch(`/postapi/${postId}`, {

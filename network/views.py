@@ -25,14 +25,14 @@ def index(request):
 
     
     if request.method == 'POST':
-        print(request.user.id)
+        # print(request.user.id)
         form = PostForm(request.POST, request.user)
      
         if form.is_valid():
             instance = form.save(commit=False)
             instance.user = request.user
             author = request.user
-            print(author)
+            # print(author)
            
             
             if not request.user == instance.user:
@@ -141,7 +141,7 @@ def profile(request, username):
         page_number = request.GET.get('page') # 10 
         page_obj = paginator.get_page(page_number)
 
-        print(post_list)
+        # print(post_list)
 
        
        
@@ -156,7 +156,7 @@ def profile(request, username):
         
         if user.user in a_user.is_following.all():
             is_following = True
-            print(is_following)
+            # print(is_following)
 
 
     if request.method == 'POST':
@@ -220,7 +220,7 @@ def postapi(request, postid):
             post.content = data["content"]
         
         if data.get("user") is not None:
-            print(post.likes.all())
+            # print(post.likes.all())
             if cuser in post.likes.all():
                 # remove user ID
                 # print(f'remove action: {cuser} id {cuser.pk}')
@@ -284,6 +284,9 @@ def following(request):
 
         # total of posts
         postNbr = len(post_list)
-
+        return render(request, "network/following.html", {'postNbr': postNbr, 'page_obj': page_obj })
+    else:
+        return render(request, "network/following.html", {
+                "message": "You are following nobody !"
+            })
     
-    return render(request, "network/following.html", {'postNbr': postNbr, 'page_obj': page_obj })
